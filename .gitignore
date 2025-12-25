@@ -1,0 +1,13 @@
+# Swap files
+*.swp
+*.swo
+
+# Undo files (if you set persistent undo)
+*.un~
+
+# System files
+.DS_Store
+.netrwhist
+
+# Lazy.nvim lockfile (Optional: keep this if you want to lock plugin versions)
+# lazy-lock.json
