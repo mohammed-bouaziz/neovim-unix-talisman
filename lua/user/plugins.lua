@@ -45,19 +45,43 @@ require("lazy").setup({
         end
     },
 
-    -- 4. Treesitter (LOCKED TO STABLE v0.9.2)
+    -- 4. treesitter
     {
         "nvim-treesitter/nvim-treesitter",
-        tag = "v0.9.2", -- CRITICAL: This prevents downloading the broken 'main' branch
-        lazy = false,
+        lazy = false, -- Rewrite docs explicitly say lazy-loading is not supported
         build = ":TSUpdate",
         config = function()
-            require("nvim-treesitter.configs").setup({
-                ensure_installed = { "c", "lua", "vim", "vimdoc", "query", "javascript", "typescript", "html", "css", "bash", "python" },
-                sync_install = false,
-                auto_install = true,
-                highlight = { enable = true, additional_vim_regex_highlighting = false },
-                indent = { enable = true },
+            -- 1. Initialize the plugin (uses default install_dir)
+            require("nvim-treesitter").setup({})
+
+            -- 2. Install the specific parsers you want (Replaces 'ensure_installed')
+            -- This runs asynchronously by default (replaces 'sync_install = false')
+            require("nvim-treesitter").install({
+                "c",
+                "lua",
+                "vim",
+                "vimdoc",
+                "query",
+                "javascript",
+                "typescript",
+                "html",
+                "css",
+                "bash",
+                "python",
+            })
+
+            -- 3. Enable Highlighting and Indentation (Replaces 'highlight' and 'indent' keys)
+            -- The new method requires hooking into the FileType autocommand
+            vim.api.nvim_create_autocmd("FileType", {
+                callback = function()
+                    -- Enable native Treesitter highlighting
+                    local ok, _ = pcall(vim.treesitter.start)
+
+                    -- Enable Treesitter-based indentation (experimental)
+                    if ok then
+                        vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+                    end
+                end,
             })
         end,
     },
@@ -194,7 +218,7 @@ require("lazy").setup({
         dependencies = { "hrsh7th/nvim-cmp" },
         config = function()
             require("nvim-autopairs").setup({
-                check_ts = true, -- use treesitter to check for pairs
+                check_ts = false, -- use treesitter to check for pairs
             })
 
             -- If you want to automatically add `(` after selecting a function or method
