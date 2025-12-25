@@ -58,7 +58,7 @@ mv ~/.config/nvim ~/.config/nvim.bak
 
 2. **Clone this repository:**
 ```bash
-git clone https://github.com/YOUR_USERNAME/REPO_NAME.git ~/.config/nvim
+git clone https://github.com/mohammed-bouaziz/neovim-unix-talisman.git
 ```
 
 3. **Run Neovim:**
