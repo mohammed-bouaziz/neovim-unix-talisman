@@ -218,7 +218,7 @@ require("lazy").setup({
         dependencies = { "hrsh7th/nvim-cmp" },
         config = function()
             require("nvim-autopairs").setup({
-                check_ts = false, -- use treesitter to check for pairs
+                check_ts = true, -- use treesitter to check for pairs
             })
 
             -- If you want to automatically add `(` after selecting a function or method
